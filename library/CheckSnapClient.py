@@ -60,6 +60,7 @@ class CheckSnapClient():
 				# print(f"####################################### downloadUrl {downloadUrl } ")
 				# print(f"####################################### snapClientDeb {snapClientDeb} ")
 
+				subprocess.run(['sudo', 'apt-get', 'update'])
 				subprocess.run(['wget', downloadUrl])
 				subprocess.run(['sudo', 'dpkg', '-i', snapClientDeb])
 				subprocess.run(['sudo', 'apt-get', '-f', 'install', '-y'])
@@ -76,6 +77,7 @@ class CheckSnapClient():
 				#print(f"####################################### downloadUrl {downloadUrl } ")
 				#print(f"####################################### snapclientDeb {snapClientDeb} ")
 
+				subprocess.run(['sudo', 'apt-get', 'update'])
 				subprocess.run(['wget', downloadUrl])
 				subprocess.run(['sudo', 'dpkg', '-i', snapClientDeb])
 				subprocess.run(['sudo', 'apt-get', '-f', 'install', '-y'])
