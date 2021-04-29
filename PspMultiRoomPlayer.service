@@ -1,0 +1,18 @@
+[Unit]
+Description=PspMultiRoomPlayer
+After=network.target
+
+[Service]
+#Type=oneshot
+Group=pi
+User=pi
+WorkingDirectory=/home/pi/utils/PspMultiRoomPlayer
+ExecStart=/home/pi/utils/PspMultiRoomPlayer/venv/bin/python3 PspMultiRoomPlayer.py
+Restart=always
+RestartSec=5
+
+
+[Install]
+WantedBy=multi-user.target
+
+

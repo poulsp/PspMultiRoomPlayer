@@ -1,0 +1,10 @@
+{
+    "thisSite": "office",
+    "asoundPcmName": "snapcastSpeaker",
+    "mixerPlaybackName": "Speaker",
+    "soundCardHwNo": "1",
+    "volumeOffset": "0",
+    "mqttHost": "<MqttHostIp>",
+    "mqttport": "1883",
+    "snapServerHost": "<SnapcastServerIp>"
+}

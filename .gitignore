@@ -1,3 +1,19 @@
+# Get rid of joe's bak files
+*.~
+
+#/modules/speaker.py
+/venv
+/config.json
+/snapcast_player.py
+/PspRadioPlayer.py
+/alice-snapcast_player.py
+
+/restart-systemd-snapcast-player.sh
+/status-systemd-snapcast-player.sh
+/stop-systemd-snapcast-player.sh
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,0 +1,47 @@
+{
+	"asoundPcmName"	: {
+		"defaultValue": "snapcastSpeaker",
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "asound entry forplayback name."
+	},
+	"mixerPlaybackName"	: {
+		"defaultValue": "Speaker",
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "Mixer playback device name."
+	},
+	"soundCardHwNo"	: {
+		"defaultValue": "0",
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "Sound card number from aplay -l."
+	},
+	"volumeOffset"	: {
+		"defaultValue": 0,
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "Volume offset for this radio compared to the radio entry volume."
+	},
+	"mqttHost"	: {
+		"defaultValue": "localhost",
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "Mqtt server hostIp."
+	},
+	"mqttport"	: {
+		"defaultValue": "1883",
+		"dataType": "integer",
+		"isSensitive": false,
+		"description": "Mqtt server Port adress."
+	},
+	"snapServerHost"	: {
+		"defaultValue": "<SnapcastServerIp>",
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "SnapServer hostIp, where the snapClient can find the SnapServer."
+	}
+}
+
+
+
