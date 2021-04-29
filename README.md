@@ -49,6 +49,7 @@ config.json example
 
 
 "snapServerHost": "<SnapcastServerIp>" is ProjectAlice Ip.
+
 "mixerPlaybackName": "Speaker" can be seen in alsamixer -c X, X from aplay -l cardNo
 
 e.g "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]"
@@ -68,5 +69,4 @@ On my Ubuntu 20.04 AMD the config looks like this
         "snapServerHost": "192.168.xx.xx"
     }
 
-Sure to edit PspMultiRoomPlayer.service
 
