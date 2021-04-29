@@ -160,15 +160,22 @@ class PspMultiRoomPlayer():
 
 
   #-----------------------------------------------
-  def _startSnapClient(self):
-    if self._radioPlaying:
-      return
-
+  def _processSnapClient(self):
     startSnapClientCmd =  f"/usr/bin/snapclient {self._snapClientOpt} > /dev/null 2>&1 &"
     os.system(startSnapClientCmd)
     logging.info(f"startSnapClientCmd: {startSnapClientCmd}")
 
+
+  #-----------------------------------------------
+  def _startSnapClient(self):
+    if self._radioPlaying:
+      return
+
     self._radioPlaying = True
+
+    # # wait a few seconds to start
+    timer = threading.Timer(3, self._processSnapClient)
+    timer.start()
 
 
   #-----------------------------------------------
