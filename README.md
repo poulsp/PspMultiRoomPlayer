@@ -13,7 +13,6 @@ to create the virtual python environment.
 
 Insert at the buttom of /etc/asound.conf or where your config is. replace the X "hw:X,0" with your soundcard number. show the soundcard and number with aplay -l
 
-The problem the X "hw:X,0" can change after a reboot, so I vill find a solution.
 
     pcm.snapcastSpeaker {
        type plug
@@ -23,6 +22,8 @@ The problem the X "hw:X,0" can change after a reboot, so I vill find a solution.
     }
 
 And then use snapcastSpeaker in config.json 'mixerDeviceName'
+
+The problem the X "hw:X,0" can change after a reboot, so I vill find a solution.
 
 For now I use a 1.5 USD USB sound card as snapcastSpeaker (cheap between 1 USD and 1.5 USD).
 
