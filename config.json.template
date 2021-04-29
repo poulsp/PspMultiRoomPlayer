@@ -11,11 +11,11 @@
 		"isSensitive": false,
 		"description": "Mixer playback device name."
 	},
-	"soundCardHwNo"	: {
-		"defaultValue": "0",
+	"soundCardDevice"	: {
+		"defaultValue": "",
 		"dataType": "string",
 		"isSensitive": false,
-		"description": "Sound card number from aplay -l."
+		"description": "Sound card device without number from aplay -l. - e.g Device [USB Audio Device], device 0: USB Audio [USB Audio] or Generic [HD-Audio Generic], device 0: ALC887-VD Analog [ALC887-VD Analog]"
 	},
 	"volumeOffset"	: {
 		"defaultValue": 0,

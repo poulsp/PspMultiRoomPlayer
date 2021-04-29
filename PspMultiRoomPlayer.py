@@ -20,6 +20,7 @@ import threading
 from datetime import timedelta
 
 from library.CheckSnapClient import(CheckSnapClient)
+from library.CheckSoundCard import(CheckSoundCard)
 
 
 # logging.basicConfig(
@@ -93,6 +94,7 @@ class PspMultiRoomPlayer():
       #super().__init__()
 
     CheckSnapClient.test4SnapClient()
+
     self._mqttClient = mqtt.Client()
     self._mqttServer = None
     self._mqttPort   = "1883"
@@ -118,34 +120,35 @@ class PspMultiRoomPlayer():
 
 
   #-----------------------------------------------
-  def readConfig(self):
+  def _readConfig(self):
     with open('config.json') as config_file:
         self._config = json.load(config_file)
 
-
   #-----------------------------------------------
-  def getConfig(self, configName: str):
+  def _getConfig(self, configName: str):
     return self._config[configName]
 
 
   #-----------------------------------------------
   def onStart(self):
-    self.readConfig()
+    self._readConfig()
 
 
-    self._mqttServer        = self.getConfig('mqttHost')
-    self._mqttPort          = int(self.getConfig('mqttport'))
-    self._snapServerHost = self.getConfig('snapServerHost')
-    if self.getConfig('snapServerHost') == "<SnapcastServerIp>":
+    self._mqttServer        = self._getConfig('mqttHost')
+    self._mqttPort          = int(self._getConfig('mqttport'))
+    self._snapServerHost = self._getConfig('snapServerHost')
+    if self._getConfig('snapServerHost') == "<SnapcastServerIp>":
       raise ConfigurationError('you must edit the config.json file.')
 
 
-    self._asoundPcmName     = self.getConfig('asoundPcmName')
-    self._soundCardNo       = self.getConfig('soundCardHwNo')
-    self._volumeOffset      = self.getConfig('volumeOffset')
-    self._snapServerHost    = self.getConfig('snapServerHost')
-    self._mixerPlaybackName = self.getConfig('mixerPlaybackName')
-    self.thisSite           = self.getConfig('thisSite')
+    self._asoundPcmName     = self._getConfig('asoundPcmName')
+    #self._soundCardNo       = self._getConfig('soundCardHwNo')
+    self._volumeOffset      = self._getConfig('volumeOffset')
+    self._snapServerHost    = self._getConfig('snapServerHost')
+    self._mixerPlaybackName = self._getConfig('mixerPlaybackName')
+    self.thisSite           = self._getConfig('thisSite')
+
+    self._soundCardNo = CheckSoundCard.checkSoundCard(self._getConfig('soundCardDevice'))
 
 
     self._snapClientOpt     = f"-s {self._asoundPcmName} -h {self._snapServerHost}"

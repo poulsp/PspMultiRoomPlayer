@@ -2,7 +2,7 @@
     "thisSite": "office",
     "asoundPcmName": "snapcastSpeaker",
     "mixerPlaybackName": "Speaker",
-    "soundCardHwNo": "1",
+    "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]",
     "volumeOffset": "0",
     "mqttHost": "<MqttHostIp>",
     "mqttport": "1883",

@@ -11,7 +11,8 @@ The PspMultiRoomPlayer is used as a satellite player e.g. on a ProjectAlice sate
 Run ./setup.sh
 to create the virtual python environment.
 
-Insert at the buttom of /etc/asound.conf or where your config is. replace the X "hw:X,0" with your soundcard number. show the soundcard and number with aplay -l
+Insert at the buttom of /etc/asound.conf or where your config is, if you have one that not for sure.
+
 
 
     pcm.snapcastSpeaker {
@@ -21,9 +22,10 @@ Insert at the buttom of /etc/asound.conf or where your config is. replace the X 
        }
     }
 
+You don't need to set the X to be the real cardNo, just leave the X.
+
 And then use snapcastSpeaker in config.json 'mixerDeviceName'
 
-The problem the X "hw:X,0" can change after a reboot, so I vill find a solution.
 
 For now I use a 1.5 USD USB sound card as snapcastSpeaker (cheap between 1 USD and 1.5 USD).
 
@@ -37,15 +39,19 @@ config.json example
         "thisSite": "office",
         "asoundPcmName": "snapcastSpeaker",
         "mixerPlaybackName": "Speaker",
-        "soundCardHwNo": "1",
+        "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]",
         "volumeOffset": "0",
         "mqttHost": "<MqttHostIp>",
         "mqttport": "1883",
         "snapServerHost": "<SnapcastServerIp>"
     }
 
+
+
 "snapServerHost": "<SnapcastServerIp>" is ProjectAlice Ip.
-"mixerPlaybackName": "Speaker" can be seen in alsamixer -c X
+"mixerPlaybackName": "Speaker" can be seen in alsamixer -c X, X from aplay -l cardNo
+
+e.g "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]"
 
 
 
@@ -55,7 +61,7 @@ On my Ubuntu 20.04 AMD the config looks like this
         "thisSite": "default",
         "asoundPcmName": "pulse",
         "mixerPlaybackName": "Master",
-        "soundCardHwNo": "1",
+        "soundCardDevice": "Generic [HD-Audio Generic], device 0: ALC887-VD Analog [ALC887-VD Analog]",
         "volumeOffset": "11",
         "mqttHost": "192.168.xx.xx",
         "mqttport": "1883",
