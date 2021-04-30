@@ -22,7 +22,11 @@ Insert at the buttom of /etc/asound.conf or where your config is, if you have on
        }
     }
 
-You don't need to set the X to be the real cardNo, just leave the X.
+If you set "autosoundCardNo": false
+You have to set the X to you real cardNo showing in aplay -l.
+
+if "autosoundCardNo": true
+You don't need to set the X to be the real cardNo, just leave the X. It will change automatically.
 
 And then use snapcastSpeaker in config.json 'mixerDeviceName'
 
@@ -40,6 +44,8 @@ config.json example
         "asoundPcmName": "snapcastSpeaker",
         "mixerPlaybackName": "Speaker",
         "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]",
+        "autosoundCardNo": false,
+        "soundCardHwNo": "1",
         "volumeOffset": "0",
         "mqttHost": "<MqttHostIp>",
         "mqttport": "1883",

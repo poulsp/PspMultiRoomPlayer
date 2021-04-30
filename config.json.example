@@ -3,6 +3,8 @@
     "asoundPcmName": "snapcastSpeaker",
     "mixerPlaybackName": "Speaker",
     "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]",
+    "autosoundCardNo" : false,
+    "soundCardHwNo": "1",
     "volumeOffset": "0",
     "mqttHost": "<MqttHostIp>",
     "mqttport": "1883",

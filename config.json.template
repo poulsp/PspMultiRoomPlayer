@@ -17,6 +17,18 @@
 		"isSensitive": false,
 		"description": "Sound card device without number from aplay -l. - e.g Device [USB Audio Device], device 0: USB Audio [USB Audio] or Generic [HD-Audio Generic], device 0: ALC887-VD Analog [ALC887-VD Analog]"
 	},
+	"autosoundCardNo"	: {
+		"defaultValue": false,
+		"dataType": "boolean",
+		"isSensitive": false,
+		"description": "Auto replace cardNo in /etc/asound.conf. Sometimes cardNo changes when reboot."
+	},
+	"soundCardHwNo": {
+		"defaultValue": "",
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "Sound cardNo taken from aplay -l."
+	},
 	"volumeOffset"	: {
 		"defaultValue": 0,
 		"dataType": "string",
