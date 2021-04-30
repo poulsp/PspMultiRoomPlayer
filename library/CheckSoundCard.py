@@ -3,6 +3,10 @@
 
 import os
 import subprocess
+import platform
+
+_PLATFORM_SYSTEM   = platform.system()
+_PLATFORM_MACHINE  = platform.machine()
 
 
 class CheckSoundCard():
@@ -31,8 +35,12 @@ class CheckSoundCard():
 
 		if _cardNo != "":
 			try:
-				_cmd = f'sudo sed  -i "s/pcm \\"hw:.,0\\".\+#.Importent!, leave this comment so PspMultiRoomPlayer can check and changes this cardNo\./pcm \\"hw:{_cardNo},0\\"\ # Importent!, leave this comment so PspMultiRoomPlayer can check and changes this cardNo\./" /etc/asound.conf  > /dev/null 2>&1 &'
-				os.system(_cmd)
+				if _PLATFORM_MACHINE == "armv7l" or _PLATFORM_MACHINE == "armv6l":
+
+					_cmd = f'sudo sed  -i "s/pcm \\"hw:.,0\\".\+#.Importent!, leave this comment so PspMultiRoomPlayer can check and changes this cardNo\./pcm \\"hw:{_cardNo},0\\"\ # Importent!, leave this comment so PspMultiRoomPlayer can check and changes this cardNo\./" /etc/asound.conf  > /dev/null 2>&1 &'
+					os.system(_cmd)
+				else:
+					pass
 			except Exception as e:
 				#raise e
 				print(f"################ Exception; {e}")

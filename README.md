@@ -22,11 +22,9 @@ Insert at the buttom of /etc/asound.conf or where your config is, if you have on
        }
     }
 
-If you set "autosoundCardNo": false
-You have to set the X to you real cardNo showing in aplay -l.
+If you set "autosoundCardNo": false - You have to set the X to you real cardNo showing in aplay -l.
 
-if "autosoundCardNo": true
-You don't need to set the X to be the real cardNo, just leave the X. It will change automatically.
+if "autosoundCardNo": true - You don't need to set the X to be the real cardNo, just leave the X. It will change automatically. Works only on  Raspberry pi's.
 
 And then use snapcastSpeaker in config.json 'mixerDeviceName'
 
@@ -69,7 +67,8 @@ On my Ubuntu 20.04 AMD the config looks like this
         "asoundPcmName": "pulse",
         "mixerPlaybackName": "Master",
         "soundCardDevice": "Generic [HD-Audio Generic], device 0: ALC887-VD Analog [ALC887-VD Analog]",
-        "volumeOffset": "11",
+        "autosoundCardNo" : true,
+        "soundCardHwNo": "0",
         "mqttHost": "192.168.xx.xx",
         "mqttport": "1883",
         "snapServerHost": "192.168.xx.xx"
