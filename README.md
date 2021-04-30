@@ -24,7 +24,7 @@ Insert at the buttom of /etc/asound.conf or where your config is, if you have on
 
 If you set "autosoundCardNo": false - You have to set the X to you real cardNo showing in aplay -l.
 
-if "autosoundCardNo": true - You don't need to set the X to be the real cardNo, just leave the X. It will change automatically. Works only on  Raspberry pi's.
+if "autosoundCardNo": true - You don't need to set the X to be the real cardNo, just leave the X. It will change automatically.
 
 And then use snapcastSpeaker in config.json 'mixerDeviceName'
 
