@@ -18,7 +18,7 @@ Insert at the buttom of /etc/asound.conf or where your config is, if you have on
     pcm.snapcastSpeaker {
        type plug
        slave {
-          pcm "hw:X,0"
+          pcm "hw:X,0" # Importent!, leave this comment so PspMultiRoomPlayer can check and changes this cardNo.
        }
     }
 
