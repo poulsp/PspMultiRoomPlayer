@@ -25,12 +25,12 @@ Insert at the buttom of /etc/asound.conf or where your config is, if you have on
 If you set "autosoundCardNo": false - You have to set the X to you real cardNo showing in aplay -l.
 
 if "autosoundCardNo": true - You don't need to set the X to be the real cardNo, just leave the X. It will change automatically.
+If you have a a respeaker 2 for example, then you should pcm.snapcastSpeaker in /etc/voicecard/asound_2mic.conf.
 
 And then use snapcastSpeaker in config.json 'mixerDeviceName'
 
 
-For now I use a 1.5 USD USB sound card as snapcastSpeaker (cheap between 1 USD and 1.5 USD).
-
+For now, I use a about 1 USD, USB sound card as a snapcast speaker (cheaply between $ 1 and $ 1.5). However, you can use RPi's built-in bcm2835 headphones as long as it is not used by other hardware.
 
 Be sure to edit the PspMultiRoomPlayer.service
 
@@ -56,7 +56,8 @@ config.json example
 
 "mixerPlaybackName": "Speaker" can be seen in alsamixer -c X, X from aplay -l cardNo
 
-e.g "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]"
+e.g "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]" or
+    "soundCardDevice": "Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 Headphones]"
 
 
 
