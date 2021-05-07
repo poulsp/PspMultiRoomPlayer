@@ -3,8 +3,7 @@
 
 #/modules/speaker.py
 /config.json
-
-
+reloader.py
 edit-PspMultiRoomPlayerConfig.sh
 PspMultiRoomPlayer-start.sh
 PspMultiRoomPlayer-stop.sh

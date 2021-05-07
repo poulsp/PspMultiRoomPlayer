@@ -62,10 +62,11 @@ class MediaVolume():
 		self._platform_system   = platform.system()
 		self._platform_machine  = platform.machine()
 		self.volume = 1
-		self.setMixerVolume('1')
+		self.setMixerVolume('40')
 
 	#-----------------------------------------------
-	def setMixerVolume(self, volume, minVolume=0, maxVolume=94,):
+	def setMixerVolume(self, volume, minVolume=0, maxVolume=94):
+
 		if int(volume) <= minVolume:
 			volume = minVolume
 		elif int(volume) >= maxVolume:
@@ -103,6 +104,7 @@ class PspMultiRoomPlayer():
 		self._config = None
 		self.thisSite = None
 		self.mediaVolume = None
+		self._startVolume = ""
 
 
 		self._timerStartSnapClient = None
@@ -134,21 +136,22 @@ class PspMultiRoomPlayer():
 		self._readConfig()
 
 
-		self._mqttServer        = self._getConfig('mqttHost')
-		self._mqttPort          = int(self._getConfig('mqttport'))
-		self._snapServerHost = self._getConfig('snapServerHost')
+		self._mqttServer        = self._getConfig('mqttHost').strip()
+		self._mqttPort          = int(self._getConfig('mqttport').strip())
+		self._snapServerHost = self._getConfig('snapServerHost').strip()
 		if self._getConfig('snapServerHost') == "<SnapcastServerIp>":
 			raise ConfigurationError('you must edit the config.json file.')
 
-		self._asoundPcmName     = self._getConfig('asoundPcmName')
-		self._volumeOffset      = self._getConfig('volumeOffset')
-		self._snapServerHost    = self._getConfig('snapServerHost')
-		self._mixerPlaybackName = self._getConfig('mixerPlaybackName')
-		self.thisSite           = self._getConfig('thisSite')
-		self._autosoundCardNo = self._getConfig('autosoundCardNo')
+		self._asoundPcmName     = self._getConfig('asoundPcmName').strip()
+		self._volumeOffset      = self._getConfig('volumeOffset').strip()
+		self._snapServerHost    = self._getConfig('snapServerHost').strip()
+		self._mixerPlaybackName = self._getConfig('mixerPlaybackName').strip()
+		self.thisSite           = self._getConfig('thisSite').strip()
+		self._autosoundCardNo   = self._getConfig('autosoundCardNo')
+		self._startVolume       = "40"
 
 		if self._autosoundCardNo:
-			self._soundCardNo = CheckSoundCard.checkSoundCard(self._getConfig('soundCardDevice'))
+			self._soundCardNo = CheckSoundCard.checkSoundCard(self._getConfig('soundCardDevice')).strip()
 		else:
 			self._soundCardNo = self._getConfig('soundCardHwNo')
 
@@ -157,9 +160,13 @@ class PspMultiRoomPlayer():
 
 
 		self.mediaVolume = MediaVolume(self._soundCardNo, self._mixerPlaybackName)
+		self.mediaVolume.setMixerVolume(self._startVolume)
 
 		self._mqttSetup()
 
+	#-----------------------------------------------
+	def onStop(self):
+		self.mediaVolume.setMixerVolume(self._startVolume)
 
 	#-----------------------------------------------
 	def _processSnapClient(self):
@@ -196,7 +203,6 @@ class PspMultiRoomPlayer():
 		logging.info(f"In radioPlay playSitepayload: {playSite}")
 
 		if playSite == self.thisSite or playSite == 'everywhere':
-			self.mediaVolume.setMixerVolume('40')
 			self._startSnapClient()
 
 
@@ -210,6 +216,8 @@ class PspMultiRoomPlayer():
 		if playSite == self.thisSite or playSite == 'everywhere':
 			self.stopSnapClient()
 
+		self.mediaVolume.setMixerVolume(self._startVolume)
+
 
 	#-----------------------------------------------
 	def _setVolume(self, client, data, msg: mqtt.MQTTMessage):
@@ -220,7 +228,7 @@ class PspMultiRoomPlayer():
 
 		volume = str(int(receivedVolume) + int(self._volumeOffset))
 		self.mediaVolume.setMixerVolume(volume)
-		logging.info(f"In setVolume volume: {volume}")
+		logging.info(f"In setVolume volume: {volume}  - receivedVolume: {receivedVolume}")
 
 
 	#-----------------------------------------------
@@ -263,5 +271,6 @@ if __name__ == "__main__":
 			time.sleep(0.1)
 	except ProgramKilled:
 		print("\nProgram killed: running cleanup code")
+		pspMultiRoomPlayer.onStop()
 		pspMultiRoomPlayer.stopSnapClient()
 		pspMultiRoomPlayer.mqttStop()
