@@ -6,18 +6,15 @@
 ## Standalone for other systems not subject to ProjectAlice.
 ## Uses the excelent 'snapcast system' from "https://github.com/badaix/snapcast" by badaix.
 
-import sys
 import signal
 import logging
 
 import platform
 import os
-import subprocess
 import paho.mqtt.client as mqtt
 import json
 import time
 import threading
-from datetime import timedelta
 
 from library.CheckSnapClient import(CheckSnapClient)
 from library.CheckSoundCard import(CheckSoundCard)
@@ -61,33 +58,52 @@ class MediaVolume():
 
 		self._platform_system   = platform.system()
 		self._platform_machine  = platform.machine()
+		self._volumeControlType = "alsamixer"
 		self.volume = 1
 		self.setMixerVolume('40')
 
-	#-----------------------------------------------
-	def setMixerVolume(self, volume, minVolume=0, maxVolume=94):
 
-		if int(volume) <= minVolume:
+	#-----------------------------------------------
+	def setMixerVolume(self, volume, physicalMixer=False, minVolume=0, maxVolume=94):
+		volume = int(volume)
+		if volume <= minVolume:
 			volume = minVolume
-		elif int(volume) >= maxVolume:
+		elif volume >= maxVolume:
 			volume = maxVolume
 
-		if self._platform_machine == "x86_64":
-			cmdSet = "amixer -D pulse sset Master {}%".format(volume)
-		elif self._platform_machine == "armv7l" or self._platform_machine == "armv6l":
-			cmdSet = f"amixer -M -c {self._soundCardNo} -- sset {self._mixerPlaybackName} {volume}%"
 
+		if self._volumeControlType == "alsamixer" or physicalMixer:
+			if self._platform_machine == "x86_64":
+				cmdSet = "amixer -D pulse sset Master {}%".format(volume)
+			elif self._platform_machine == "armv7l" or self._platform_machine == "armv6l":
+				cmdSet = f"amixer -M -c {self._soundCardNo} -- sset {self._mixerPlaybackName} {volume}%"
+
+		else:
+			maxVolume=100
+			if self._platform_machine == "x86_64":
+				cmdSet = "amixer -D pulse sset Master {}%".format(maxVolume)
+			elif self._platform_machine == "armv7l" or self._platform_machine == "armv6l":
+				cmdSet = f"amixer -M -c {self._soundCardNo} -- sset {self._mixerPlaybackName} {maxVolume}%"
 		#logging.info(f"cmdSet: {cmdSet}")
 		os.popen(cmdSet).read()
 		self.volume = volume
 
 
+	#-----------------------------------------------
+	def setVolumeControlType(self, control):
+		self._volumeControlType = control
+		self.setMixerVolume('40')
+
 #-----------------------------------------------
 class PspMultiRoomPlayer():
 
-	_MULTIROOM_PLAYER_PLAY      = "psp/multiroom/player/play"
-	_MULTIROOM_PLAYER_STOP      = "psp/multiroom/player/stop"
-	_MULTIROOM_VOLUME           = "psp/multiroom/volume"
+	_MULTIROOM_PLAYER_PLAY							= "psp/multiroom/player/play"
+	_MULTIROOM_PLAYER_STOP							= "psp/multiroom/player/stop"
+	_MULTIROOM_VOLUME 									= "psp/multiroom/volume"
+	_MULTIROOM_VOLUME_CONTROL_TYPE_SET 	= "psp/multiroom/volume/controltype/set"
+	_MULTIROOM_VOLUME_CONTROL_TYPE_GET 	= "psp/multiroom/volume/controltype/get"
+
+
 
 	#-----------------------------------------------
 	#def __init__(self, mqttServer="localhost", mqttPort=1883):
@@ -117,6 +133,9 @@ class PspMultiRoomPlayer():
 		self._volumeOffset      = ""
 		self._snapServerHost    = ""
 		self._mixerPlaybackName = ""
+
+		self._volumeControlType = ""
+
 
 		self.onStart()
 
@@ -159,14 +178,17 @@ class PspMultiRoomPlayer():
 		self._snapClientOpt     = f"-s {self._asoundPcmName} -h {self._snapServerHost}"
 
 
+
 		self.mediaVolume = MediaVolume(self._soundCardNo, self._mixerPlaybackName)
 		self.mediaVolume.setMixerVolume(self._startVolume)
 
 		self._mqttSetup()
 
+		self._getVolumeControlType()
+
 	#-----------------------------------------------
 	def onStop(self):
-		self.mediaVolume.setMixerVolume(self._startVolume)
+		self.mediaVolume.setMixerVolume(self._startVolume, physicalMixer=True)
 
 	#-----------------------------------------------
 	def _processSnapClient(self):
@@ -196,7 +218,6 @@ class PspMultiRoomPlayer():
 
 	#-----------------------------------------------
 	def _radioPlay(self, client, data, msg: mqtt.MQTTMessage):
-		topic = msg.topic
 		#logging.info(f"In radioPlay payload: {payload}")
 		payload = json.loads(msg.payload.decode('utf-8'))
 		playSite = payload.get("playSite")
@@ -208,7 +229,6 @@ class PspMultiRoomPlayer():
 
 	#-----------------------------------------------
 	def _radioStop(self, client, data, msg: mqtt.MQTTMessage):
-		topic = msg.topic
 		payload = json.loads(msg.payload.decode('utf-8'))
 		logging.info(f"In radioStop payload: {payload}")
 		#siteId = payload.get("siteId")
@@ -221,7 +241,6 @@ class PspMultiRoomPlayer():
 
 	#-----------------------------------------------
 	def _setVolume(self, client, data, msg: mqtt.MQTTMessage):
-		topic = msg.topic
 		payload = json.loads(msg.payload.decode('utf-8'))
 
 		receivedVolume = payload['volume']
@@ -232,11 +251,27 @@ class PspMultiRoomPlayer():
 
 
 	#-----------------------------------------------
+	def _getVolumeControlType(self, ):
+		self._mqttClient.publish(self._MULTIROOM_VOLUME_CONTROL_TYPE_GET, json.dumps({'to': 'VolumeManager'}))
+
+
+	#-----------------------------------------------
+	def _setVolumeControlType(self, client, data, msg: mqtt.MQTTMessage):
+		payload = json.loads(msg.payload.decode('utf-8'))
+
+
+		self._volumeControlType = payload['volumeControlType'] #'volumeControlType': 'alsamixer'
+		self.mediaVolume.setVolumeControlType(self._volumeControlType)
+		self.mediaVolume.setMixerVolume(payload['volume'])
+
+
+	#-----------------------------------------------
 	def onConnect(self, client, userData, flags, rc):
 		subscribedEvents = [
 			(self._MULTIROOM_PLAYER_PLAY, 0),
 			(self._MULTIROOM_PLAYER_STOP, 0),
-			(self._MULTIROOM_VOLUME, 0)
+			(self._MULTIROOM_VOLUME, 0),
+			(self._MULTIROOM_VOLUME_CONTROL_TYPE_SET, 0)
 		]
 
 		self._mqttClient.subscribe(subscribedEvents)
@@ -250,6 +285,8 @@ class PspMultiRoomPlayer():
 		self._mqttClient.message_callback_add(self._MULTIROOM_PLAYER_PLAY, self._radioPlay)
 		self._mqttClient.message_callback_add(self._MULTIROOM_PLAYER_STOP, self._radioStop)
 		self._mqttClient.message_callback_add(self._MULTIROOM_VOLUME, self._setVolume)
+		self._mqttClient.message_callback_add(self._MULTIROOM_VOLUME_CONTROL_TYPE_SET, self._setVolumeControlType)
+
 
 		#self.mqttClient.on_message = self.onMessage
 		self._mqttClient.connect(self._mqttServer, self._mqttPort)
