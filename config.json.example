@@ -8,5 +8,7 @@
     "volumeOffset": "0",
     "mqttHost": "<MqttHostIp>",
     "mqttport": "1883",
-    "snapServerHost": "<SnapcastServerIp>"
+    "snapServerHost": "<SnapcastServerIp>",
+    "latency": 0,
+    "startVolume": "50"
 }

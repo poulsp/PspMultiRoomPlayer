@@ -27,13 +27,13 @@ class CheckSnapClient():
 	def test4SnapClient():
 		#print(f"################ In method test4SnapClient")
 		try:
-			_dpkgOutput = subprocess.check_output(
+			subprocess.check_output(
 				"dpkg-query -l snapclient",
 				stderr=subprocess.STDOUT,
 				shell=True
 			).decode('utf-8').replace('\n','')
 
-		except subprocess.CalledProcessError as e:
+		except subprocess.CalledProcessError:
 			# Install snapclient
 			#print(f"################ In method test do installSnapclient")
 			CheckSnapClient.installSnapClient()
@@ -43,13 +43,13 @@ class CheckSnapClient():
 	@staticmethod
 	def installSnapClient():
 		try:
-			_dpkgOutput = subprocess.check_output(
+			subprocess.check_output(
 				"dpkg-query -l snapclient",
 				stderr=subprocess.STDOUT,
 				shell=True
 			).decode('utf-8').replace('\n','')
 
-		except subprocess.CalledProcessError as e:
+		except subprocess.CalledProcessError:
 			# Install snapclient
 
 			if _PLATFORM_MACHINE == "x86_64":

@@ -3,7 +3,7 @@
 		"defaultValue": "snapcastSpeaker",
 		"dataType": "string",
 		"isSensitive": false,
-		"description": "asound entry forplayback name."
+		"description": "asound entry for playback name."
 	},
 	"mixerPlaybackName"	: {
 		"defaultValue": "Speaker",
@@ -51,7 +51,19 @@
 		"defaultValue": "<SnapcastServerIp>",
 		"dataType": "string",
 		"isSensitive": false,
-		"description": "SnapServer hostIp, where the snapClient can find the SnapServer."
+		"description": "snapserver hostIp, where the snapclient can find the snapserver."
+	},
+	"latency"	: {
+		"defaultValue": 0,
+		"dataType": "integer",
+		"isSensitive": false,
+		"description": "latency between snapserver and snapclien."
+	}.
+	"startVolume"	: {
+		"defaultValue": 50,
+		"dataType": "integer",
+		"isSensitive": false,
+		"description": "When you stop the MultiRoomPlayer you mixer will be set to this volume."
 	}
 }
 

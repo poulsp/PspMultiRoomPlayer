@@ -30,7 +30,7 @@ class CheckSoundCard():
 
 		except subprocess.CalledProcessError as e:
 			_cardNo = ""
-			#print(f"################ subprocess.CalledProcessError; {e}")
+			print(f"################ subprocess.CalledProcessError; {e}")
 			raise e
 
 		if _cardNo != "":

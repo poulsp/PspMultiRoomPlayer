@@ -1,6 +1,3 @@
 paho-mqtt
-toml
 psutil
 setuptools
-pyyaml
-#logging
