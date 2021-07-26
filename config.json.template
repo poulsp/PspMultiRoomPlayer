@@ -1,4 +1,10 @@
 {
+	"thisSite"	: {
+		"defaultValue": "Base",
+		"dataType": "string",
+		"isSensitive": false,
+		"description": "Site/location for this device. e.g 'Base', Desktop Office' or 'Kitchen'"
+	},
 	"asoundPcmName"	: {
 		"defaultValue": "snapcastSpeaker",
 		"dataType": "string",

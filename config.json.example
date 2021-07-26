@@ -1,5 +1,5 @@
 {
-    "thisSite": "office",
+    "thisSite": "Base",
     "asoundPcmName": "snapcastSpeaker",
     "mixerPlaybackName": "Speaker",
     "soundCardDevice": "Device [USB Audio Device], device 0: USB Audio [USB Audio]",

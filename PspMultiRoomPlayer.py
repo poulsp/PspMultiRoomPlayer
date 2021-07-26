@@ -233,10 +233,15 @@ class PspMultiRoomPlayer():
 		# TODO vi gemmer lige denne her under opstart.
 		self._sendVolumeOffset()
 
+		self._startSnapClient()
+
 
 
 	#-----------------------------------------------
 	def onStop(self):
+		#TODO new strategy, Start SnapClient onStart and kill it onStop
+		self.stopSnapClient()
+
 		self.mediaVolume.setMixerVolume(self._startVolume, physicalMixer=True)
 
 
@@ -290,7 +295,10 @@ class PspMultiRoomPlayer():
 
 
 		if playSite == self.thisSite or playSite == 'everywhere':
-			self._startSnapClient()
+			#TODO new strategy, Start SnapClient onStart and kill it onStop
+			# if not then mute the alsamixer
+			pass
+			# self._startSnapClient()
 
 
 		if self._volumeControlType != "alsamixer":
@@ -318,7 +326,8 @@ class PspMultiRoomPlayer():
 		#siteId = payload.get("siteId")
 		playSite = payload.get("playSite")
 		if playSite == self.thisSite or playSite == 'everywhere':
-			self.stopSnapClient()
+			#TODO new strategy, Start SnapClient onStart and kill it onStop
+			pass
 
 		if self._volumeControlType == "alsamixer":
 			self.mediaVolume.setMixerVolume(self._startVolume, physicalMixer=True)
